@@ -4,12 +4,18 @@ services:
     image: postgres:14.5
     container_name: postgres_master
     restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      start_period: 5s
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
       - ./data:/var/lib/postgresql/data
+      - ./data-slave:/var/lib/postgresql/data-slave
       - ./init-script:/etc/postgresql/init-script
       - ./init-script/config/pg_hba.conf:/etc/postgresql/pg_hba.conf
       - ./init-script/config/postgres.conf:/etc/postgresql/postgresql.conf
+
+      - ./init-script/init.sh:/docker-entrypoint-initdb.d/init.sh
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -33,3 +39,6 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=postgres
+    depends_on:
+      postgres_master:
+        condition: service_healthy
