@@ -22,7 +22,7 @@
 
 Клонирование проекта из этого репо:
 ```
-git clone [<ссылка на ваш репозиторий>](https://github.com/DOMENTOR/DWH_hw01)
+git clone https://github.com/DOMENTOR/DWH_hw01
 cd hw01
 ```
 Запуск инициализации БД:
